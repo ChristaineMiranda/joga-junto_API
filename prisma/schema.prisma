@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  name       String       
+  foto       String
+  email      String       @unique @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Session    Session[]
+  Guess      Guess[]
+  Group      Group[]
+  GroupUser  GroupUser[]
+
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Group {
+  id        Int      @id @default(autoincrement())
+  creatorId Int 
+  User      User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  codeGroup String    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  GroupUser GroupUser[]
+}
+model GroupUser {
+  id        Int      @id @default(autoincrement())
+  groupId   Int 
+  Group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    Int  
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score     Int    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Guess {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId    Int 
+  groupId   Int
+  goalsFirstTeam Int
+  goalsSecondTeam Int     
+  winner    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+}
+
+
+  
+
