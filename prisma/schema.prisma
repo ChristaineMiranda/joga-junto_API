@@ -37,7 +37,8 @@ model Group {
   id        Int      @id @default(autoincrement())
   creatorId Int 
   User      User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  codeGroup String    
+  codeGroup String  
+  name      String  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   GroupUser GroupUser[]
@@ -48,7 +49,7 @@ model GroupUser {
   Group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   userId    Int  
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score     Int    
+  score     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

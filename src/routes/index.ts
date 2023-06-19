@@ -8,5 +8,5 @@ import groupRoutes from "./groupRoutes.js";
 const routes = Router();
 routes.use([userRoutes]);
 routes.use(authValidate);
-routes.use([groupRoutes])
+routes.use([groupRoutes]);
 export default routes;

@@ -40,11 +40,19 @@ function notFound(){
     }
 }
 
+function conflict(){
+    return {
+        name: "conflict",
+        message: "This name is already in use"
+    }
+}
+
 export default{
     invalidCredentialsError,
     userNotFound,
     unauthorized,
     incorrectFieldsError,
     duplicatedEmailError,
-    notFound
+    notFound,
+    conflict
 }
