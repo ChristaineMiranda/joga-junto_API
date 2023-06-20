@@ -29,7 +29,7 @@ model Session {
   id        Int      @id @default(autoincrement())
   userId    Int
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String
+  token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -37,8 +37,8 @@ model Group {
   id        Int      @id @default(autoincrement())
   creatorId Int 
   User      User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  codeGroup String  
-  name      String  
+  codeGroup String   @unique @db.VarChar(255)
+  name      String   @unique @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   GroupUser GroupUser[]

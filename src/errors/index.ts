@@ -36,7 +36,7 @@ function duplicatedEmailError(){
 function notFound(){
     return{
         name:"NotFound",
-        message:"Not found!"
+        message:"Not found"
     }
 }
 
