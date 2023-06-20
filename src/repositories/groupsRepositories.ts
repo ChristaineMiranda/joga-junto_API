@@ -39,6 +39,12 @@ async function rankingGroup(groupId:number) {
     });
 }
 
+async function findGroupByCode(codeGroup) {
+    return await prisma.group.findFirst({
+        where: { codeGroup }
+    });  
+}
+
 async function rankingGeral() {
     return await prisma.groupUser.findMany({
         include: { User: true },
@@ -52,5 +58,6 @@ export default {
     findGroupByName,
     associateUserToGroup,
     rankingGroup, 
-    rankingGeral
+    rankingGeral,
+    findGroupByCode
 }

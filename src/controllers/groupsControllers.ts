@@ -22,7 +22,22 @@ async function createGroup(req:Request, res:Response, next:NextFunction) {
     }    
 }
 
+async function joinGroup(req:Request, res:Response, next:NextFunction) {
+    const { code } = req.params;
+    console.log(code)
+    const {user} = res.locals;
+    try {
+        await groupsService.joinGroup(code, user);
+        return res.sendStatus(httpStatus.OK);
+    } catch (error) {
+        return res.send(error);
+    }
+
+
+}
+
 export default {
     listGroups,
-    createGroup
+    createGroup,
+    joinGroup
 }

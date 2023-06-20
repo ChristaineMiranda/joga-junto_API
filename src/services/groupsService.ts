@@ -17,7 +17,17 @@ async function createGroup(userId:number, name:string) {
     return newGroup;
 }
 
+async function joinGroup(codeGroup:string, userId:number) {
+    const groupExists = await groupsRepositories.findGroupByCode(codeGroup);
+    if(!groupExists) throw errors.notFound;
+
+    await groupsRepositories.associateUserToGroup(userId, groupExists.id);
+    return;
+}
+
 export default  {
     listGroups,
-    createGroup
+    createGroup,
+    joinGroup,
+    
 }
