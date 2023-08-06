@@ -5,5 +5,5 @@ import validateSchema from "../middlewares/validateSchemaMiddleware.js";
 const guessRoutes = Router();
 
 guessRoutes.post("/guess",validateSchema(guessSchema.guess), guessControllers.createGuess);
-guessRoutes.get("/guess/my-guesses", guessControllers.listMyGuessesByGroup);
+guessRoutes.get("/guess", guessControllers.listMyGuessesByGroup);
 export default guessRoutes;
