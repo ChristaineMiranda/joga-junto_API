@@ -41,7 +41,7 @@ async function deleteGame(req:Request, res:Response, next:NextFunction) {
     const gameId = Number(id);
     try {
         await gameService.deleteGame(gameId);
-        return res.sendStatus(httpStatus.OK);
+        return res.sendStatus(httpStatus.NO_CONTENT);
     } catch (error) {
         next(error);
     }    

@@ -45,6 +45,15 @@ async function deleteGame(id: number) {
     return await prisma.game.delete({ where: { id } });
 }
 
+async function findLastGames() {
+    return await prisma.game.findMany({
+        take:10,
+        orderBy: {
+            date:'desc'
+        }
+    });
+}
+
 export default {
     findGameById,
     checkDuplicatedGame,
