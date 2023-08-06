@@ -14,7 +14,6 @@ async function createUser(name:string, email: string, password: string, foto:str
 }
 
 async function signIn(email:string, password:string) {
-    console.log(email)
     const userExists = await userRepositories.findByEmail(email);
     
     if(!userExists){

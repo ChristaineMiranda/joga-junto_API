@@ -7,7 +7,7 @@ function invalidCredentialsError(){
 function userNotFound(){
     return{
         name: 'NotFoundError',
-        message: 'Not Found'
+        message: 'Unregistered user'
     }
 }
 
@@ -32,7 +32,6 @@ function duplicatedEmailError(){
     }
 }
 
-
 function notFound(){
     return{
         name:"NotFound",
@@ -43,7 +42,14 @@ function notFound(){
 function conflict(){
     return {
         name: "conflict",
-        message: "This name is already in use"
+        message: "Conflict"
+    }
+}
+
+function gameNotFound(){
+    return{
+        name:"GameNotFound",
+        message:"Game not found"
     }
 }
 
@@ -54,5 +60,6 @@ export default{
     incorrectFieldsError,
     duplicatedEmailError,
     notFound,
-    conflict
+    conflict,
+    gameNotFound
 }

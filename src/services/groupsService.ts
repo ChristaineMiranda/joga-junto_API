@@ -7,6 +7,10 @@ async function listGroups() {
     return await groupsRepositories.listGroups();    
 }
 
+async function myGroups(userId:number) {
+    return await groupsRepositories.listMyGroups(userId);    
+}
+
 async function createGroup(userId:number, name:string) {
     if(!name) throw errors.incorrectFieldsError(["Name field cannot be empty"]);
     const nameExists = await groupsRepositories.findGroupByName(name);
@@ -38,6 +42,7 @@ async function rankingOverall() {
 
 export default  {
     listGroups,
+    myGroups,
     createGroup,
     joinGroup,
     rankingGroup,

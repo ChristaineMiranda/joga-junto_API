@@ -18,6 +18,7 @@ async function findByEmail(email:string) {
         where:{ email }
     });  
 }
+
 async function findSessionById(id: number) {
     return await prisma.session.findFirst({
         where: { id }
@@ -32,11 +33,13 @@ async function createSession( userId:number, token:string) {
         }        
     });
 }
+
 async function findSessionByToken(token: string){
     return await prisma.session.findFirst({
         where:{ token }
     });
 }
+
 async function findUserById(id:number) {
     return await prisma.user.findFirst({
         where:{ id }

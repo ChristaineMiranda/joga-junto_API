@@ -10,6 +10,15 @@ async function listGroups(req: Request, res: Response, next: NextFunction) {
         next(error)
     }
 }
+async function myGroups(req: Request, res: Response, next: NextFunction) {
+    const { user } = res.locals as {user:number};
+    try {
+        const myGroup = await groupsService.myGroups(user);
+        return res.status(httpStatus.OK).send(myGroup);
+    } catch (error) {
+        next(error)
+    }
+}
 
 async function createGroup(req: Request, res: Response, next: NextFunction) {
     const { user } = res.locals;
@@ -57,6 +66,7 @@ async function rankingOverall(req:Request, res:Response, next:NextFunction) {
 
 export default {
     listGroups,
+    myGroups,
     createGroup,
     joinGroup,
     rankingGroup,

@@ -1,25 +1,33 @@
-import prisma from "../config/database";
+import prisma from "../config/database.js";
 
-async function createGuess (userId: number, gameId:number, groupId:number, goalsFirstTeam:number, goalsSecondTeam:number, winner:string) {
+async function createGuess (userId: number, gameId:number, groupCode:string, goalsFirstTeam:number, goalsSecondTeam:number) {
     return await prisma.guess.create({
         data: {
             userId,
             gameId, 
-            groupId,
+            groupCode,
             goalsFirstTeam,
             goalsSecondTeam,     
-            winner
         }
     });
 }
 
-async function listGuessByUserId(userId:number) {
+async function listGuessByUserIdAndCodeGroup(userId:number, groupCode:string) {
     return await prisma.guess.findMany({
-        where:{ userId }
-    })    
+        where:{ userId, groupCode }
+    });    
+}
+
+async function findDuplicatedGuess(userId:number, gameId:number, groupCode:string) {
+    return await prisma.guess.findFirst({
+        where: {
+            userId, gameId, groupCode
+        }
+    });    
 }
 
 export default {
     createGuess,
-    listGuessByUserId
+    listGuessByUserIdAndCodeGroup,
+    findDuplicatedGuess
 }

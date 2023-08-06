@@ -42,6 +42,7 @@ model Group {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   GroupUser GroupUser[]
+  Guess     Guess[]
 }
 model GroupUser {
   id        Int      @id @default(autoincrement())
@@ -54,15 +55,33 @@ model GroupUser {
   updatedAt DateTime @updatedAt
 }
 
+model Game {
+  id Int @id @default(autoincrement())
+  firstTeam String
+  secondTeam String
+  goalsFirst  Int? 
+  goalsSecond Int?
+  winner String?
+  date String
+  time String
+  step  String
+  round String
+  trip  String
+  Guess      Guess[]
+
+}
+
 model Guess {
   id        Int      @id @default(autoincrement())
   userId    Int
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gameId    Int 
-  groupId   Int
+  gameId    Int   
+  Game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)   
+  groupCode String   
+  Group     Group    @relation(fields: [groupCode], references: [codeGroup], onDelete: Cascade)
   goalsFirstTeam Int
   goalsSecondTeam Int     
-  winner    String
+  isCorrect Boolean?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt 
 }

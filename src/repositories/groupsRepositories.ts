@@ -4,6 +4,13 @@ async function listGroups() {
     return await prisma.group.findMany();    
 }
 
+async function listMyGroups(userId:number) {
+    return await prisma.groupUser.findMany({
+        where:{userId},
+        include:{Group: true}
+    });    
+}
+
 async function createGroup(creatorId: number, codeGroup: string, name:string ) {
     return await prisma.group.create({
         data:{
@@ -66,7 +73,7 @@ async function rankingOverall() {
 
 async function findGroupByCode(codeGroup:string) {
     return await prisma.group.findUnique({
-        where: { codeGroup }
+        where: { codeGroup:codeGroup }
     });  
 }
 
@@ -79,6 +86,7 @@ async function rankingGeral() {
 
 export default {
     listGroups,
+    listMyGroups,
     createGroup,
     findGroupByName,
     associateUserToGroup,
