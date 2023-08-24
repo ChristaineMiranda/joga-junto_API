@@ -7,6 +7,7 @@ import userRepositories from "../repositories/userRepositories.js";
 export default async function authValidate(req: Request, res: Response, next: NextFunction){
     const {authorization} = req.headers;
     const token = authorization?.replace("Bearer ", "");
+    
 try {
     if(!token){
         throw errors.invalidCredentialsError();
@@ -16,7 +17,6 @@ try {
         throw errors.invalidCredentialsError();        
     }
     res.locals.user = userExists.id;    
-
     next();
 } catch (error) {
     next(error)

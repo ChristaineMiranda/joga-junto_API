@@ -4,10 +4,10 @@ import guessService from "../services/guessService.js";
 
 async function createGuess(req: Request, res: Response, next: NextFunction) {
     const { user } = res.locals;
-    const { gameId, codeGroup, goalsFirstTeam, goalsSecondTeam } = req.body;
+    const { gameId, idGroup, goalsFirstTeam, goalsSecondTeam } = req.body;
 
     try {
-        await guessService.createGuess(user, gameId, codeGroup, goalsFirstTeam, goalsSecondTeam);
+        await guessService.createGuess(user, gameId, idGroup, goalsFirstTeam, goalsSecondTeam);
 
         return res.sendStatus(httpStatus.CREATED)
     } catch (error) {
@@ -17,10 +17,11 @@ async function createGuess(req: Request, res: Response, next: NextFunction) {
 
 async function listMyGuessesByGroup(req: Request, res: Response, next: NextFunction) {
     const { user } = res.locals;
-    const { codeGroup } = req.body;
+    const { id } = req.params;
+    const idGroup = Number(id);
 
     try {
-        const myGuessesList = await guessService.listAllMyGuessesByGroup(user, codeGroup);
+        const myGuessesList = await guessService.listAllMyGuessesByGroup(user, idGroup);
         return res.status(httpStatus.OK).send(myGuessesList);
 
     } catch (error) {

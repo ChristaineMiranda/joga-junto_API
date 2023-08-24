@@ -9,7 +9,10 @@ const game = joi.object({
     time: joi.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).required(),
     step: joi.string().required(),
     round: joi.string().required(),
-    trip: joi.string().required()
+    trip: joi.string().required(),
+    goalsFirst:joi.number(),
+    goalsSecond:joi.number(),
+    winner:joi.string()
 });
 
 const updateGame = joi.object({

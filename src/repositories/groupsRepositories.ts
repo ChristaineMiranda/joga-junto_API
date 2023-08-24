@@ -1,19 +1,48 @@
 import prisma from "../config/database.js";
 
-async function listGroups() {
-    return await prisma.group.findMany();    
+async function listGroups(userId: number) {
+    const groups = await prisma.group.findMany({
+        select: {
+            id: true,
+            codeGroup: true,
+            name: true,
+            User: {
+                select: {
+                    name: true,
+                    foto: true
+                }
+            },
+            GroupUser: {
+                where: { userId },
+                select: { id: true }
+            }
+        }
+    });
+    const groupsWithMembership = groups.map(group => {
+        const userBelongsToGroup = group.GroupUser.length > 0;
+        return {
+            ...group,
+            userBelongsToGroup
+        };
+    });
+    return groupsWithMembership;
 }
 
-async function listMyGroups(userId:number) {
+async function listMyGroups(userId: number) {
     return await prisma.groupUser.findMany({
-        where:{userId},
-        include:{Group: true}
-    });    
+        where: { userId },
+        select: {
+            Group: true,
+            score: true
+        }
+
+    });
 }
 
-async function createGroup(creatorId: number, codeGroup: string, name:string ) {
+async function createGroup(creatorId: number, codeGroup: string, name: string) {
+    
     return await prisma.group.create({
-        data:{
+        data: {
             creatorId,
             codeGroup,
             name
@@ -21,13 +50,13 @@ async function createGroup(creatorId: number, codeGroup: string, name:string ) {
     });
 }
 
-async function findGroupByName(name:string) {
+async function findGroupByName(name: string) {
     return await prisma.group.findUnique({
         where: { name }
-    });  
+    });
 }
 
-async function associateUserToGroup(userId:number, groupId:number) {
+async function associateUserToGroup(userId: number, groupId: number) {
     await prisma.groupUser.create({
         data: {
             userId,
@@ -36,52 +65,84 @@ async function associateUserToGroup(userId:number, groupId:number) {
     });
 }
 
-async function rankingGroup(groupId:number) {
+async function rankingGroup(groupId: number) {
     return await prisma.groupUser.findMany({
-        where:{
+        where: {
             groupId
         },
-        include: { 
+        include: {
             User: {
                 select: {
                     name: true,
                     foto: true
                 }
+            },
+            Group: {
+                select: {
+                    name: true
+                }
             }
         },
-        orderBy: { score: "desc"}
+        orderBy: { score: "desc" }
     });
 }
 
-
-async function rankingOverall() {
-    return await prisma.user.findMany({
-        include: {
-            GroupUser: {
-                select:{
-                    score: true
-                },
-                orderBy:{
-                    score: "desc"
-                },
-                take: 1
-            }
-        },        
-    });
-}
-
-
-async function findGroupByCode(codeGroup:string) {
+async function findGroupById(idGroup: number) {
     return await prisma.group.findUnique({
-        where: { codeGroup:codeGroup }
-    });  
+        where: { id: idGroup }
+    });
 }
 
 async function rankingGeral() {
     return await prisma.groupUser.findMany({
-        include: { User: true },
+
+        select: {
+            score: true,
+            User: {
+                select: {
+                    id: true,
+                    name: true,
+                    foto: true
+                }
+            }
+        },
+        distinct: ["userId"],
         orderBy: { score: "desc" }
-    });  
+    });
+}
+
+async function findGroupByCode(codeGroup: string) {
+    return await prisma.group.findUnique({
+        where: { codeGroup }
+    });
+}
+
+async function findMemberGroupRelation(userId: number, groupId: number) {
+    const relation = await prisma.groupUser.findFirst({
+        where: {
+            userId,
+            groupId
+        }
+    });
+    return (relation !== null);
+}
+
+async function findRegisterGroupUser(userId: number, groupId: number) {
+    return await prisma.groupUser.findFirst({
+        where: {
+            userId,
+            groupId
+        }
+    });
+}
+
+async function updateScore(id: number, points: number) {
+    return await prisma.groupUser.update({
+        where: { id },
+        data: {
+            score: points
+        }
+    });
 }
 
 export default {
@@ -90,8 +151,11 @@ export default {
     createGroup,
     findGroupByName,
     associateUserToGroup,
-    rankingGroup, 
+    rankingGroup,
     rankingGeral,
+    findGroupById,
     findGroupByCode,
-    rankingOverall
+    findMemberGroupRelation,
+    findRegisterGroupUser,
+    updateScore
 }

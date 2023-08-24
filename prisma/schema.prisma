@@ -67,11 +67,12 @@ model Game {
   goalsFirst  Int? 
   goalsSecond Int?
   winner String?
-  date String
-  time String
+  dateTime DateTime
   step  String
   round String
   trip  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   Guess      Guess[]
 
 }
@@ -82,8 +83,8 @@ model Guess {
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   gameId    Int   
   Game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)   
-  groupCode String   
-  Group     Group    @relation(fields: [groupCode], references: [codeGroup], onDelete: Cascade)
+  groupId   Int   
+  Group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   goalsFirstTeam Int
   goalsSecondTeam Int     
   isCorrect Boolean?

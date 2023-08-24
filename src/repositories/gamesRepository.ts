@@ -1,37 +1,39 @@
 import { Game } from "@prisma/client";
 import prisma from "../config/database.js";
-import { GameRequest, GameUpdate } from "../protocols/index.js";
+import { GameInput, GameUpdate } from "../protocols/index.js";
 
 async function findGameById(id: number) {
     return await prisma.game.findUnique({ where: { id } });
 }
 
-async function checkDuplicatedGame(firstTeam: string, secondTeam: string, date: string): Promise<boolean> {
+async function checkDuplicatedGame(firstTeam: string, secondTeam: string, dateTime: Date): Promise<boolean> {
 
     const firstDuplicated = await prisma.game.findFirst({
         where: {
             firstTeam,
-            date,
+            dateTime,
         }
     });
     const secondDuplicated = await prisma.game.findFirst({
         where: {
             secondTeam,
-            date
+            dateTime
         }
     });
 
     return (!!firstDuplicated || !!secondDuplicated)
 }
 
-async function createGame(data: GameRequest): Promise<Game> {
+async function createGame(data: GameInput): Promise<Game> {
     return await prisma.game.create({
         data
     });
 }
 
 async function findAllGames() {
-    return await prisma.game.findMany();
+    return await prisma.game.findMany({
+        orderBy: { dateTime: "desc" }
+    });
 }
 
 async function updateGame(id: number, data: GameUpdate) {
@@ -47,12 +49,14 @@ async function deleteGame(id: number) {
 
 async function findLastGames() {
     return await prisma.game.findMany({
-        take:10,
+        take: 9,
         orderBy: {
-            date:'desc'
+            dateTime: 'desc'
         }
     });
 }
+
+
 
 export default {
     findGameById,
@@ -60,5 +64,6 @@ export default {
     createGame,
     findAllGames,
     updateGame,
-    deleteGame
+    deleteGame,
+    findLastGames,
 }

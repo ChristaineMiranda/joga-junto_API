@@ -3,8 +3,9 @@ import httpStatus from "http-status";
 import groupsService from "../services/groupsService.js";
 
 async function listGroups(req: Request, res: Response, next: NextFunction) {
+    const {user} = res.locals as {user:number};
     try {
-        const list = await groupsService.listGroups();
+        const list = await groupsService.listGroups(user);
         return res.status(httpStatus.OK).send(list);
     } catch (error) {
         next(error)
@@ -21,26 +22,26 @@ async function myGroups(req: Request, res: Response, next: NextFunction) {
 }
 
 async function createGroup(req: Request, res: Response, next: NextFunction) {
-    const { user } = res.locals;
-    const { name } = req.body;
+    const { user } = res.locals as {user:number};
+    const { name } = req.body as {name:string};
+
     try {
         const newGroup = await groupsService.createGroup(user, name);
         return res.status(httpStatus.CREATED).send(newGroup);
     } catch (error) {
-       next(error);
+      next(error);
     }
 }
 
 async function joinGroup(req: Request, res: Response, next: NextFunction) {
-    const { code } = req.params;
-    const { user } = res.locals;
+    const {id} = req.body;
+    const { user } = res.locals;   
     try {
-        await groupsService.joinGroup(code, user);
+        await groupsService.joinGroup(user, id);
         return res.sendStatus(httpStatus.OK);
     } catch (error) {
         next(error);
     }
-
 
 }
 
@@ -64,11 +65,12 @@ async function rankingOverall(req:Request, res:Response, next:NextFunction) {
     }
 }
 
+
+
 export default {
     listGroups,
     myGroups,
     createGroup,
     joinGroup,
     rankingGroup,
-    rankingOverall
-}
+    rankingOverall,}

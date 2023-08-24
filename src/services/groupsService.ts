@@ -3,8 +3,8 @@ import shortid from "shortid";
 import errors from "../errors/index.js";
 
 
-async function listGroups() {
-    return await groupsRepositories.listGroups();    
+async function listGroups(userId:number) {
+    return await groupsRepositories.listGroups(userId);    
 }
 
 async function myGroups(userId:number) {
@@ -18,14 +18,17 @@ async function createGroup(userId:number, name:string) {
     
     const codeGroup = shortid.generate();
     const newGroup = await groupsRepositories.createGroup(userId, codeGroup, name);
+  
     await groupsRepositories.associateUserToGroup(userId, newGroup.id);
     return newGroup;
 }
 
-async function joinGroup(codeGroup:string, userId:number) {
-    const groupExists = await groupsRepositories.findGroupByCode(codeGroup);
+async function joinGroup(userId:number, groupId:number) {
+    const groupExists = await groupsRepositories.findGroupById(groupId);
     if(!groupExists) throw errors.notFound();
-    await groupsRepositories.associateUserToGroup(userId, groupExists.id);
+    const isMember = await groupsRepositories.findMemberGroupRelation(userId, groupId);
+    if(isMember) throw errors.conflict();
+    await groupsRepositories.associateUserToGroup(userId, groupId);
     return;
 }
 
@@ -36,7 +39,7 @@ async function rankingGroup(id:number) {
 }
 
 async function rankingOverall() {
-    const ranking = await groupsRepositories.rankingOverall();
+    const ranking = await groupsRepositories.rankingGeral();
     return ranking;    
 }
 
@@ -46,5 +49,5 @@ export default  {
     createGroup,
     joinGroup,
     rankingGroup,
-    rankingOverall   
+    rankingOverall,
 }

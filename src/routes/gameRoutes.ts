@@ -9,4 +9,5 @@ gameRoutes.post("/games", validateSchema(gameSchema.game), roleValidate, gameCon
 gameRoutes.get("/games", gameControllers.listGames);
 gameRoutes.patch("/games/:id", validateSchema(gameSchema.updateGame), roleValidate, gameControllers.updateGame);
 gameRoutes.delete("/games/:id", roleValidate, gameControllers.deleteGame);
+gameRoutes.get("/games/last-games", gameControllers.listLastGames);
 export default gameRoutes;

@@ -1,33 +1,47 @@
 import prisma from "../config/database.js";
 
-async function createGuess (userId: number, gameId:number, groupCode:string, goalsFirstTeam:number, goalsSecondTeam:number) {
+async function createGuess (userId: number, gameId:number, groupId:number, goalsFirstTeam:number, goalsSecondTeam:number) {
     return await prisma.guess.create({
         data: {
             userId,
             gameId, 
-            groupCode,
+            groupId,
             goalsFirstTeam,
             goalsSecondTeam,     
         }
     });
 }
 
-async function listGuessByUserIdAndCodeGroup(userId:number, groupCode:string) {
+async function listGuessByUserIdAndIdGroup(userId:number, groupId:number) {
     return await prisma.guess.findMany({
-        where:{ userId, groupCode }
+        where:{ userId, groupId }
     });    
 }
 
-async function findDuplicatedGuess(userId:number, gameId:number, groupCode:string) {
+async function findDuplicatedGuess(userId:number, gameId:number, groupId:number) {
     return await prisma.guess.findFirst({
         where: {
-            userId, gameId, groupCode
+            userId, gameId, groupId
         }
     });    
+}
+async function findGuessByGameId(gameId:number){
+    return await prisma.guess.findMany({
+        where: {gameId}
+    });    
+}
+
+async function updateGuess(id:number, data) {
+    return await prisma.guess.update({
+        where:{id},
+        data
+    });
 }
 
 export default {
     createGuess,
-    listGuessByUserIdAndCodeGroup,
-    findDuplicatedGuess
+    listGuessByUserIdAndIdGroup,
+    findDuplicatedGuess,
+    findGuessByGameId,
+    updateGuess
 }

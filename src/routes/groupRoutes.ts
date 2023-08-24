@@ -5,9 +5,9 @@ const groupRoutes = Router();
 
 groupRoutes.post("/groups", groupsControllers.createGroup);
 groupRoutes.get("/groups", groupsControllers.listGroups);
-groupRoutes.get("/groups/my-group", groupsControllers.myGroups);
-groupRoutes.post("/groups/join/:code", groupsControllers.joinGroup);
+groupRoutes.get("/groups/my-groups", groupsControllers.myGroups);
+groupRoutes.post("/groups/join", groupsControllers.joinGroup);
 groupRoutes.get("/groups/ranking/:id", groupsControllers.rankingGroup);
-groupRoutes.get("/ranking/overall", groupsControllers.rankingOverall);
+groupRoutes.get("/ranking", groupsControllers.rankingOverall);
 
 export default groupRoutes;

@@ -47,10 +47,21 @@ async function deleteGame(req:Request, res:Response, next:NextFunction) {
     }    
 }
 
+async function listLastGames(req:Request, res:Response, next:NextFunction) {
+    try {
+        const games = await gameService.listLastGames();
+        return res.status(httpStatus.OK).send(games);
+
+    } catch (error) {
+        next(error);
+    }    
+}
+
 export default {
     createGame,
     listGames,
     updateGame,
-    deleteGame
+    deleteGame,
+    listLastGames
 
 }
